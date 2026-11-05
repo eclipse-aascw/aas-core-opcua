@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2025 aas-core-opcua AUTHORS
+#
+# SPDX-License-Identifier: MIT
+
+version = 1
+
+# Prose and metadata where a header would end up in the rendered output
+# (e.g., README shown on GitHub).
+[[annotations]]
+path = ["AUTHORS", "README.md", "CONTRIBUTING.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 aas-core-opcua AUTHORS"
+SPDX-License-Identifier = "MIT"
+
+# aas-core-codegen reads the name prefix verbatim and checks that it is
+# a valid identifier, so the snippet must not carry a header.
+[[annotations]]
+path = "dev_scripts/snippets/v3/name_prefix.txt"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2025 aas-core-opcua AUTHORS"
+SPDX-License-Identifier = "MIT"

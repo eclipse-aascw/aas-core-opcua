@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2025 aas-core-opcua AUTHORS
+#
+# SPDX-License-Identifier: MIT
+
 """Run pre-commit checks on the repository."""
 import argparse
 import enum
@@ -20,6 +24,7 @@ class Step(enum.Enum):
     REFORMAT = "reformat"
     MYPY = "mypy"
     PYLINT = "pylint"
+    REUSE = "reuse"
 
 
 def call_and_report(
@@ -50,7 +55,7 @@ def call_and_report(
     return exit_code
 
 
-def main() -> int:
+def main() -> int:  # pylint: disable=too-many-branches
     """Execute entry_point routine."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -160,6 +165,18 @@ def main() -> int:
             return 1
     else:
         print("Skipped pylint'ing.")
+
+    if Step.REUSE in selects and Step.REUSE not in skips:
+        print("Checking the REUSE compliance...")
+        exit_code = call_and_report(
+            verb="check the REUSE compliance",
+            cmd=[sys.executable, "-m", "reuse", "lint"],
+            cwd=repo_root,
+        )
+        if exit_code != 0:
+            return 1
+    else:
+        print("Skipped checking the REUSE compliance.")
 
     return 0
 
