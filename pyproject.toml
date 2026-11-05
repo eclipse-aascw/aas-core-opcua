@@ -4,7 +4,10 @@ version = "0.0.1"
 requires-python = ">=3.8"
 dependencies = [
     "requests==2.*",
-    "aas-core-codegen@git+https://github.com/aas-core-works/aas-core-codegen.git#egg=aas-core-codegen@0c7131e"
+    # NOTE (aaronzi, 2026-11-05):
+    # aas-core-codegen discontinued the OPC UA generator after 7cd0b69, so we pin
+    # the last revision that still has the opcua target.
+    "aas-core-codegen @ git+https://github.com/aas-core-works/aas-core-codegen.git@7cd0b694aa62461ac56749af20650dd16eaff6bb"
 ]
 
 [tool.setuptools.packages.find]
