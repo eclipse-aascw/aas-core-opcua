@@ -16,7 +16,8 @@ import requests
 
 # NOTE (aaronzi, 2026-11-05):
 # The meta-model is copied verbatim from aas-core-meta, so we attribute it to
-# its authors. The upstream file does not carry a license header itself.
+# its authors. Once the upstream file carries a license header itself, we keep
+# that one and do not prepend ours.
 #
 # REUSE-IgnoreStart
 _META_MODEL_LICENSE_HEADER = """\
@@ -25,6 +26,8 @@ _META_MODEL_LICENSE_HEADER = """\
 # SPDX-License-Identifier: MIT
 
 """
+
+_SPDX_LICENSE_IDENTIFIER_MARKER = "SPDX-License-Identifier:"
 # REUSE-IgnoreEnd
 
 # NOTE (aaronzi, 2026-11-05):
@@ -62,6 +65,14 @@ def _prepend_nodeset_license_header(text: str) -> str:
 
     text = _LEADING_SPDX_COMMENT_RE.sub("", text, count=1)
     return declaration + _NODESET_LICENSE_HEADER + text
+
+
+def _prepend_meta_model_license_header(text: str) -> str:
+    """Prepend the aas-core-meta license header unless ``text`` already has one."""
+    if _SPDX_LICENSE_IDENTIFIER_MARKER in text:
+        return text
+
+    return _META_MODEL_LICENSE_HEADER + text
 
 
 def _add_license_header_to_nodeset(path: pathlib.Path) -> None:
@@ -123,7 +134,7 @@ def main() -> int:
         content = response.text
 
         comment = f"# Downloaded from: {raw_url}\n# Revision: {revision[:7]}\n\n"
-        full_content = _META_MODEL_LICENSE_HEADER + comment + content
+        full_content = _prepend_meta_model_license_header(comment + content)
 
         aas_metamodel_file = aas_metamodels_dir / rel_path.name
         aas_metamodel_file.write_text(full_content, encoding="utf-8")
